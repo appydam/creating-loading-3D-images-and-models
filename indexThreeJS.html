@@ -1,0 +1,108 @@
+<!DOCTYPE>
+<html>
+    <head>
+        
+         <link rel="stylesheet" type ="text/css" href="threeJS.css">
+        
+        <title>Three.js crash course</title> 
+        
+<!--
+        <style>
+            body {margin: 0;}
+            canvas { width: 100% ; height: 100%;}
+        </style>
+-->
+        
+        
+    </head>
+    
+    <body>
+    
+        <script src="js/three.js"></script>
+        <script src="js/OrbitControls.js"></script>
+    
+        <script>
+            var scene = new THREE.Scene( );
+            var camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1 ,1000 );
+            
+            var renderer = new THREE.WebGLRenderer( );
+            
+            renderer.setSize( window.innerWidth, window.innerHeight ); //gives a perfect sleek design to cube 
+            
+            document.body.appendChild( renderer.domElement );
+            
+            //to remove the void space when we resize our brower window
+            window.addEventListener('resize', function( )
+            {
+                var height = window.innerHeight;// dont let create void space when height of window is changed
+                var width = window.innerWidth;
+                renderer.setSize(width,height);
+                camera.aspect = width/height;
+                camera.updateProjectionMatrix( ); // dont change the object size if window is is changed
+                
+            });
+            
+            controls = new THREE.OrbitControls(camera , renderer.domElement);  // we baically can move or resize the object by mouse
+            
+            
+            
+            // create the shape
+            var geometry = new THREE.BoxGeometry( 1 , 1 , 1 );
+            
+            var cubeMaterials = 
+                [   // these lines basically add pictures to the faces of the cube
+                    new THREE.MeshBasicMaterial( { map:new THREE.TextureLoader( ).load( '1.png' ), side:THREE.DoubleSide}),
+                    new THREE.MeshBasicMaterial( { map:new THREE.TextureLoader( ).load( '2.jpg' ), side:THREE.DoubleSide}),
+                    new THREE.MeshBasicMaterial( { map:new THREE.TextureLoader( ).load( '3.png' ), side:THREE.DoubleSide}),
+                    new THREE.MeshBasicMaterial( { map:new THREE.TextureLoader( ).load( '4.jpg' ), side:THREE.DoubleSide}),
+                    new THREE.MeshBasicMaterial( { map:new THREE.TextureLoader( ).load( '7.jpg' ), side:THREE.DoubleSide}),
+                    new THREE.MeshBasicMaterial( { map:new THREE.TextureLoader( ).load( '6.png' ), side:THREE.DoubleSide}),
+                    
+                ]
+            
+            
+            // create a material , colour or image texture
+//            var material = new THREE.MeshBasicMaterial( {color:0x1aedbc,wireframe:false});   // same colour faces
+             var material = new THREE.MeshFaceMaterial( cubeMaterials);  // different pics faces
+            
+            var cube = new THREE.Mesh( geometry, material );
+            scene.add( cube );
+            
+            camera.position.z=3;// to change the size of the cube , basically its the distance of cube from z axis
+            
+            
+            
+            //game logic
+            var update = function( )
+            {
+                cube.rotation.x += 0.01;
+                cube.rotation.y += 0.005;
+                
+                
+            };
+            
+            //draw scene
+            var render = function( )
+            {
+                renderer.render( scene , camera );
+                
+            };
+            
+            //run game loop(update , render , repeat)
+            var GameLoop = function( ){
+                
+              requestAnimationFrame( GameLoop );
+                
+                update( );
+                render( );
+                
+            };
+            
+            GameLoop( );
+            
+        </script>
+        
+    </body>
+    
+    
+</html>
